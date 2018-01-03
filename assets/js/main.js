@@ -9,6 +9,7 @@ function preload() {
     game.load.image('back', 'assets/tilemaps/tiles/king.jpg');
     game.load.audio('song', ['assets/audio/narusong2.mp3']);
     game.load.audio('jump', ['assets/audio/jump4.wav']);
+    game.load.image('fire', 'assets/sprites/shmup-boom.png');
     game.load.image('button', 'assets/tilemaps/mute.png', 120, 120);
     game.load.spritesheet('player', 'assets/images/foxyfree1.png', 64.5, 54, 8);
 
@@ -22,8 +23,12 @@ var button;
 var player;
 var jumpButton;
 var jumpTimer = 0;
+var coins;
+var score = 0;
+var scoreText;
 
 function create() {
+
 
 
 
@@ -36,6 +41,7 @@ function create() {
 
 
     game.physics.startSystem(Phaser.Physics.ARCADE);
+
 
 
     //////////////////map json/////////////////////////////////
@@ -55,8 +61,6 @@ function create() {
 
 
 
-
-
     level1Layer = map.createLayer('level1');
 
 
@@ -70,16 +74,33 @@ function create() {
     map.setCollision(4, true, level1Layer);
     layer.resizeWorld();
 
-
     //////////////////////////////////////////////////////////////////////
 
+    //game.add.sprite(0, 0, 'fire');
+
+    stars = game.add.group();
+
+
+    stars.enableBody = true;
+
+    //  Here we'll create 12 of them evenly spaced apart
+    for (var i = 0; i < 15; i++) {
+        //  Create a star inside of the 'stars' group
+        var star = stars.create(i * 70, 0, 'fire');
+
+        //  Let gravity do its thing
+        star.body.gravity.y = 200;
+
+        //  This just gives each star a slightly random bounce value
+        star.body.bounce.y = 0.5 + Math.random() * 0.2;
+
+    }
 
     //button
-    button = game.add.button(game.world.centerX - 1600, 20, 'button', actionOnClick);
+    button = game.add.button(game.world.centerX - 1600, 330, 'button', actionOnClick);
     button.scale.x = 0.3;
     button.scale.y = 0.3;
     button.fixedToCamera = true;
-
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,17 +108,14 @@ function create() {
     player = game.add.sprite(35, game.world.height - 500, 'player');
 
 
-
     //  activer la physique sur le personnage
     game.physics.enable(player);
-
 
 
     //  propriétés physique du personnage
     player.body.bounce.y = 0.2;
     player.body.gravity.y = 1200;
     player.body.collideWorldBounds = true;
-
 
 
 
@@ -113,8 +131,11 @@ function create() {
     game.camera.follow(player);
 
     music = game.sound.play('song');
-
+    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
     game.physics.enable(sprite);
+
+    scoreText.camera.follow(player);
+
 
 }
 
@@ -129,12 +150,17 @@ function actionOnClick() {
     }
     button = !button;
 }
+
+
 //////////////////////////////////////////////////////////////////
 
 
 function update() {
 
+    game.physics.arcade.collide(stars, level1Layer);
     game.physics.arcade.collide(player, level1Layer);
+    game.physics.arcade.overlap(player, stars, collectStar, null, this, );
+
 
 
     //  initialise les mouvement du personnage
@@ -158,7 +184,6 @@ function update() {
 
         player.frame = 5;
 
-
     }
 
 
@@ -169,6 +194,13 @@ function update() {
         var snd = game.add.audio('jump');
         snd.play();
     }
+}
 
+function collectStar(player, star) {
 
+    // Removes the star from the screen
+    star.kill();
+
+    score += 10;
+    scoreText.text = 'Score: ' + score;
 }
