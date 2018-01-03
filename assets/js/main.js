@@ -11,6 +11,7 @@ function preload() {
     game.load.audio('jump', ['assets/audio/jump4.wav']);
     game.load.image('button', 'assets/tilemaps/mute.png', 120, 120);
     game.load.spritesheet('player', 'assets/images/foxyfree1.png', 64.5, 54, 8);
+
 }
 
 var map;
@@ -49,24 +50,27 @@ function create() {
     map.addTilesetImage('king', 'back');
 
 
-    map.setCollisionBetween(1, 16);
-    map.setCollision(0);
-
-
     layer = map.createLayer('back');
     layer.scrollFactorX = 0.2
 
-    layer = map.createLayer('level1');
+
+
+
+
+    level1Layer = map.createLayer('level1');
+
 
     layer = map.createLayer('top1');
     layer.scrollFactorX = 0.4
 
     layer = map.createLayer('top2');
 
-
+    map.setCollisionBetween(0, 2, true, level1Layer);
+    map.setCollisionBetween(19, 20, true, level1Layer);
+    map.setCollision(4, true, level1Layer);
     layer.resizeWorld();
 
-    map.setCollisionBetween(1, 999, true, 'level1');
+
     //////////////////////////////////////////////////////////////////////
 
 
@@ -130,7 +134,7 @@ function actionOnClick() {
 
 function update() {
 
-    game.physics.arcade.collide(player, map);
+    game.physics.arcade.collide(player, level1Layer);
 
 
     //  initialise les mouvement du personnage
@@ -160,7 +164,7 @@ function update() {
 
     //  Jump and sound
     if (jumpButton.isDown && player.body.onFloor() && game.time.now > jumpTimer) {
-        player.body.velocity.y = -450;
+        player.body.velocity.y = -500;
         jumpTimer = game.time.now + 150;
         var snd = game.add.audio('jump');
         snd.play();
