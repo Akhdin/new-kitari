@@ -24,7 +24,7 @@ var jumpTimer = 0;
 
 function create() {
 
-    if (!game.device.desktop) { game.input.onDown.add(gofull, this); }
+
 
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
     this.scale.maxWidth = this.game.width;
