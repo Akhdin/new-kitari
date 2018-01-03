@@ -84,9 +84,9 @@ function create() {
     stars.enableBody = true;
 
     //  Here we'll create 12 of them evenly spaced apart
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 40; i++) {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 70, 0, 'fire');
+        var star = stars.create(i * 120, 0, 'fire');
 
         //  Let gravity do its thing
         star.body.gravity.y = 200;
@@ -124,18 +124,22 @@ function create() {
     player.animations.add('right', [4, 5, 6, 7], 10, true);
     player.health = 100;
 
+
     //camera avec le clavier
     cursors = game.input.keyboard.createCursorKeys();
     jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
     game.camera.follow(player);
 
-    music = game.sound.play('song');
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#F5F5F5' });
     game.physics.enable(sprite);
 
-    scoreText.camera.follow(player);
 
+    scoreText.fixedToCamera = true;
+
+    music = game.sound.play('song');
+
+    ///////////////////////score/////////////////////
 
 }
 
@@ -203,4 +207,6 @@ function collectStar(player, star) {
 
     score += 10;
     scoreText.text = 'Score: ' + score;
+
+
 }
