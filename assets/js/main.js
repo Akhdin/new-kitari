@@ -29,7 +29,7 @@ var scoreText;
 
 function create() {
 
-
+    music = game.sound.play('song');
 
 
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -125,22 +125,19 @@ function create() {
     player.health = 100;
 
 
-    //camera avec le clavier
+    //commandes avec le clavier
     cursors = game.input.keyboard.createCursorKeys();
     jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 
+
+    //camera suit le joueur
     game.camera.follow(player);
 
+    //score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#F5F5F5' });
     game.physics.enable(sprite);
-
-
-    scoreText.fixedToCamera = true;
-
-    music = game.sound.play('song');
-
     ///////////////////////score/////////////////////
-
+    scoreText.fixedToCamera = true;
 }
 
 ///////////////mute sound/////////////////////////////////////////
