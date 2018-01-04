@@ -9,7 +9,7 @@ function preload() {
     game.load.image('back', 'assets/tilemaps/tiles/king.jpg');
     game.load.audio('song', ['assets/audio/narusong2.mp3']);
     game.load.audio('jump', ['assets/audio/jump4.wav']);
-    game.load.spritesheet('coin', 'assets/sprites/coin.png', 31, 31);
+    game.load.spritesheet('coin', 'assets/sprites/coin.png', 32, 32);
     game.load.image('button', 'assets/tilemaps/mute.png', 120, 120);
     game.load.spritesheet('player', 'assets/images/foxyfree1.png', 64.5, 54, 8);
 
@@ -87,7 +87,7 @@ function create() {
     //  Here we'll create 12 of them evenly spaced apart
     for (var i = 0; i < 40; i++) {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 200, 0, 'coin');
+        var star = stars.create(i * 210, 0, 'coin');
 
         //  Let gravity do its thing
         star.body.gravity.y = 200;
@@ -95,9 +95,11 @@ function create() {
         //  This just gives each star a slightly random bounce value
         star.body.bounce.y = 0.5 + Math.random() * 0.2;
 
-
     }
+    stars.callAll('animations.add', 'animations', 'spin', [0, 1, 2, 3, 4, 5], 14, true);
 
+    //  And play them
+    stars.callAll('animations.play', 'animations', 'spin');
 
 
     //button
