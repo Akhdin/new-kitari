@@ -6,6 +6,7 @@ function preload() {
 
     game.load.image('tiles', 'assets/tilemaps/tiles/tileset1.png');
     game.load.image('cloud', 'assets/tilemaps/tiles/tileset3.png');
+    game.load.image('wave', 'assets/tilemaps/tiles/wave2.png');
     game.load.image('back', 'assets/tilemaps/tiles/king.jpg');
     game.load.audio('song', ['assets/audio/narusong2.mp3']);
     game.load.audio('jump', ['assets/audio/jump4.wav']);
@@ -55,24 +56,28 @@ function create() {
 
     map.addTilesetImage('tileset1', 'tiles');
     map.addTilesetImage('tileset3', 'cloud');
+    map.addTilesetImage('wave2', 'wave');
     map.addTilesetImage('king', 'back');
 
 
     layer = map.createLayer('back');
     layer.scrollFactorX = 0.2
 
+    topBackLayer = map.createLayer('topback');
+    topBackLayer._y = -50;
 
     level1Layer = map.createLayer('level1');
-
 
     layer = map.createLayer('top1');
     layer.scrollFactorX = 0.4
 
     layer = map.createLayer('top2');
 
+    map.setCollisionBetween(716, 721, true, topBackLayer);
     map.setCollisionBetween(0, 2, true, level1Layer);
     map.setCollisionBetween(19, 20, true, level1Layer);
     map.setCollision(4, true, level1Layer);
+
     layer.resizeWorld();
 
     //////////////////////////////////////////////////////////////////////
@@ -166,6 +171,7 @@ function update() {
 
     game.physics.arcade.collide(stars, level1Layer);
     game.physics.arcade.collide(player, level1Layer);
+    game.physics.arcade.collide(player, topBackLayer);
     game.physics.arcade.overlap(player, stars, collectStar, null, this, );
 
 
