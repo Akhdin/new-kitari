@@ -87,7 +87,7 @@ function create() {
     //  Here we'll create 12 of them evenly spaced apart
     for (var i = 0; i < 40; i++) {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 120, 0, 'coin');
+        var star = stars.create(i * 200, 0, 'coin');
 
         //  Let gravity do its thing
         star.body.gravity.y = 200;
