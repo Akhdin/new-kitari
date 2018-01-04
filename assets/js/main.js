@@ -9,10 +9,11 @@ function preload() {
     game.load.image('back', 'assets/tilemaps/tiles/king.jpg');
     game.load.audio('song', ['assets/audio/narusong2.mp3']);
     game.load.audio('jump', ['assets/audio/jump4.wav']);
-    game.load.image('fire', 'assets/sprites/shmup-boom.png');
+    game.load.spritesheet('coin', 'assets/sprites/coin.png', 31, 31);
     game.load.image('button', 'assets/tilemaps/mute.png', 120, 120);
     game.load.spritesheet('player', 'assets/images/foxyfree1.png', 64.5, 54, 8);
 
+    game.load.audio("coinsnd", "assets/audio/keepcoins2.wav");
 }
 
 var map;
@@ -30,6 +31,7 @@ var scoreText;
 function create() {
 
     music = game.sound.play('song');
+    game.hurtSnd = game.add.audio('coinsnd');
 
 
     this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -60,7 +62,6 @@ function create() {
     layer.scrollFactorX = 0.2
 
 
-
     level1Layer = map.createLayer('level1');
 
 
@@ -76,7 +77,7 @@ function create() {
 
     //////////////////////////////////////////////////////////////////////
 
-    //game.add.sprite(0, 0, 'fire');
+
 
     stars = game.add.group();
 
@@ -86,7 +87,7 @@ function create() {
     //  Here we'll create 12 of them evenly spaced apart
     for (var i = 0; i < 40; i++) {
         //  Create a star inside of the 'stars' group
-        var star = stars.create(i * 120, 0, 'fire');
+        var star = stars.create(i * 120, 0, 'coin');
 
         //  Let gravity do its thing
         star.body.gravity.y = 200;
@@ -94,7 +95,10 @@ function create() {
         //  This just gives each star a slightly random bounce value
         star.body.bounce.y = 0.5 + Math.random() * 0.2;
 
+
     }
+
+
 
     //button
     button = game.add.button(game.world.centerX - 1600, 330, 'button', actionOnClick);
@@ -135,9 +139,9 @@ function create() {
 
     //score
     scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#F5F5F5' });
-    game.physics.enable(sprite);
-    ///////////////////////score/////////////////////
     scoreText.fixedToCamera = true;
+    ///////////////////////score/////////////////////
+
 }
 
 ///////////////mute sound/////////////////////////////////////////
@@ -199,11 +203,11 @@ function update() {
 
 function collectStar(player, star) {
 
+    var coins = game.add.audio("coinsnd");
+    coins.play();
     // Removes the star from the screen
     star.kill();
 
-    score += 10;
+    score += 100;
     scoreText.text = 'Score: ' + score;
-
-
 }
